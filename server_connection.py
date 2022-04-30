@@ -1,5 +1,6 @@
 import socket
 import json
+from Client_IA import SENDmove
 
 
 def receiveJSON(socket):
@@ -23,7 +24,7 @@ def sendJSON(socket, data):
 
 def subscribe(port,name):
     port = int(port)
-    message = {"request": "subscribe","port": port,"name": name,"matricules": ["195150", ""]}
+    message = {"request": "subscribe","port": port,"name": name,"matricules": ["195150", "195116"]}
     s = socket.socket()
     s.connect(('localhost',3000))
     sendJSON(s, message)
@@ -39,4 +40,11 @@ def subscribe(port,name):
         if serverrequest['request'] == 'ping':
             sendJSON(client, {'response': 'pong'})
             listening = False
+        if serverrequest['request'] == 'play':
+            sendJSON(client, SENDmove(serverrequest))
+
+
+
+
+
 

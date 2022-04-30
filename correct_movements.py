@@ -1,6 +1,6 @@
 ### Server output ######
 ServerOutput = [
-            [28, 35,2],
+            [28, 35,2,9,57],
             [27, 36,20,3,4,5]
         ] # [W],[B]
 #### Empty board ####
@@ -26,7 +26,7 @@ def Boarding(board):
         j= indexB % 8
         StateMap[i][j]="b"
         # print(i,j) 
-
+PawnsDestroyed=[]
 def corecct_moves(player,state):
     PossibleMove=[]
     for i in range(8):
@@ -42,9 +42,15 @@ def corecct_moves(player,state):
                 sw,l8=support(player,1,1,i,j,state,0)
                 if(nn or ww or ee or ss or ne or nw or se or sw):
                     StateMap[i][j]=player.upper()    
+                    # print(l1+l2+l3+l4+l5+l6+l7+l8) 
                     index = i*8+j
-                    PossibleMove.append (index)              
-    return StateMap, PossibleMove 
+                    PossibleMove.append (index)    
+                    # PawnsDestroyed.append (l1+l2+l3+l4+l5+l6+l7+l8)   
+                    PawnsDestroyed.append (l1+l2+l3+l4+l5+l6+l7+l8) 
+    print("PawnsDestroyed:", PawnsDestroyed)
+    return StateMap, PossibleMove
+
+
 
 #### identify oponent ####   
 def opponent(s):
@@ -98,3 +104,23 @@ print("Possible Moves maping: ")
 for i in range(len(new_b)):
     print(new_b[i])
     # print("\n")
+
+
+def maximumIndices(liste):
+    maxi = liste[0]
+    longueur=len(liste)
+    for i in range(longueur):
+        if liste[i] >= maxi:
+            maxi = liste[i]
+    return maxi
+
+#best move to take
+def BestMove(possibleMove):
+    a = maximumIndices(PawnsDestroyed)
+    b = PawnsDestroyed.index(a)
+    c = possibleMove[b]
+    return c
+
+
+    
+print(BestMove(possibleMove))
