@@ -1,43 +1,53 @@
-board = [
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", " ", " ", ""],
-    ["", "", "", "w", "w", "", "", ""],
-    ["", "", "b", "w", "w", "", "", ""],
-    ["", "", "", "", "b", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-]
-leagal_moves=[]
+### Server output ######
+ServerOutput = [
+            [28, 35,2],
+            [27, 36,20,3,4,5]
+        ] # [W],[B]
+#### Empty board ####
+StateMap=[
+["", "", "", "", "", "", "", ""],
+["", "", "", "", "", "", "", ""],
+["", "", "", "", "", "", "", ""],
+["", "", "", "", "", "", "", ""],
+["", "", "", "", "", "", "", ""],
+["", "", "", "", "", "", "", ""],
+["", "", "", "", "", "", "", ""],
+["", "", "", "", "", "", "", ""],
+] 
+### Mapping server output ######
+def Boarding(board):
+    for indexW in board[0] :
+        i=indexW // 8
+        j= indexW % 8
+        # print(i,j)
+        StateMap[i][j]="w"
+    for indexB in board[1] :
+        i=indexB // 8
+        j= indexB % 8
+        StateMap[i][j]="b"
+        # print(i,j) 
 
-def corecct_moves(s,position):
-    a=[
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ]  
+def corecct_moves(player,state):
+    PossibleMove=[]
     for i in range(8):
         for j in range(8):
-            if(position[i][j]==""):
-                nn,s1=support(s,-1,0,i,j,position,0)
-                ww,s2=support(s,0,-1,i,j,position,0)
-                ee,s3=support(s,0,1,i,j,position,0)
-                ss,s4=support(s,1,0,i,j,position,0)
-                ne,s5=support(s,-1,-1,i,j,position,0)
-                nw,s6=support(s,-1,1,i,j,position,0)
-                se,s7=support(s,1,-1,i,j,position,0) 
-                sw,s8=support(s,1,1,i,j,position,0)
+            if(state[i][j]==""):
+                nn,l1=support(player,-1,0,i,j,state,0)
+                ww,l2=support(player,0,-1,i,j,state,0)
+                ee,l3=support(player,0,1,i,j,state,0)
+                ss,l4=support(player,1,0,i,j,state,0)
+                ne,l5=support(player,-1,-1,i,j,state,0)
+                nw,l6=support(player,-1,1,i,j,state,0)
+                se,l7=support(player,1,-1,i,j,state,0) 
+                sw,l8=support(player,1,1,i,j,state,0)
                 if(nn or ww or ee or ss or ne or nw or se or sw):
-                    a[i][j]=s   
-                    print(s1+s2+s3+s4+s5+s6+s7+s8) 
-    return a            
+                    StateMap[i][j]=player.upper()    
+                    index = i*8+j
+                    PossibleMove.append (index)              
+    return StateMap, PossibleMove 
 
-def other(s):
+#### identify oponent ####   
+def opponent(s):
     if s=="b":
         return "w"
     elif s=="w":
@@ -45,45 +55,46 @@ def other(s):
     else:
         return("problem")        
 
-
-def support(s,di,dj,i,j,position,score):
-    autre=other(s)
-    if(autre=="problem"):
+###### Check moves part 1#####
+def support(s,di,dj,i,j,state,score):
+    other=opponent(s)
+    if(other=="problem"):
         return False,0
     if i+di>7 or i+di<0:
         return False,0
     if j+dj>7 or j+dj<0:
         return False,0
-    if(position[i+di][j+dj]!=autre):
+    if(state[i+di][j+dj]!=other):
         return False,0
     if i+2*di>7 or i+2*di<0:
         return False,0
     if j+2*dj>7 or j+2*dj<0:
         return False,0
-    return check(s,di,dj,i+2*di,j+2*dj,position,score)         
+    return check(s,di,dj,i+2*di,j+2*dj,state,score)         
         
     
-
-def check(s,di,dj,i,j,position,score):
-    if position[i][j]==s:
+###### Check moves part 2#####
+def check(s,di,dj,i,j,state,score):
+    if state[i][j]==s:
         score=score+1 
         return True,score
     if i+di>7 or i+di<0:
         return False,0
     if j+dj>7 or j+dj<0:
         return False,0
-    if position[i][j]=="":
+    if state[i][j]=="":
         return False,0
     score=score+1    
-    l,s=check(s,di,dj,i+di,j+dj,position,score)  
+    l,s=check(s,di,dj,i+di,j+dj,state,score)  
     return l,s     
 
+### Update StateMap####
+Boarding(ServerOutput)
 
+new_b, possibleMove=corecct_moves("w",StateMap)
 
-
-new_b=corecct_moves("b",board)
-
+print("Possible Moves list: {} ".format(possibleMove))
+print("Possible Moves maping: ")
 for i in range(len(new_b)):
     print(new_b[i])
-    print("\n")
-
+    # print("\n")
