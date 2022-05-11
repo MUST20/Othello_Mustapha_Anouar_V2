@@ -13,7 +13,7 @@ $ python ClientIA.py [port]
 
 Stratégie :
 
-Calculer tous les mouvements possibles , pour ceci on a utilisé les fonctions de prof. On a ensuite rajouté une intelligence qui consiste à calculer le nombre de pions à éliminer pour chaque mouvement possible. Donc on aura 2 listes qui ont la même longueur et qui correspondent aux mouvements possibles et au nombre des pions à éliminer. On calcule le maximum de la liste PawnsDestroyed ainsi l'indice de ce maximum et on prend le mouvement correspondant comme BestMove. La fonction SendMove sert à envoyer le mouvement à faire comme réponse à la requête "play", ou à envoyer Null si aucun mouvement n'est possible ( la liste PossibleMoves est vide).
+On calcule tous les mouvements possibles avec la fonction "possibleMoves" . On a ensuite rajouté une intelligence qui consiste à calculer le nombre de pions à éliminer pour chaque mouvement possible. Donc on aura 2 listes qui ont la même longueur et qui correspondent aux mouvements possibles et au nombre des pions à éliminer. On calcule le maximum de la liste PawnsDestroyed ainsi l'indice de ce maximum et on prend le mouvement correspondant comme BestMove. La fonction SendMove sert à envoyer le mouvement à faire comme réponse à la requête "play", ou à envoyer Null si aucun mouvement n'est possible ( la liste PossibleMoves est vide).
 
 Bibliothèques utilisées :
 
